@@ -4,3 +4,5 @@ const getRandomNumber = (min, max) => (max < min || min < 0 || max < 0 || !Numbe
 //Функция получения рандомного числа из диапазона, с указанием числа знаков после запятой
 const getRandomFractionalNumber = (min, max, count) => (max < min || min < 0 || max < 0 || count < 0 || !Number.isInteger(count)) ? 'Нижняя граница должна быть меньше верхней, границы не должны быть отрицательными числами, количество знаков после запятой должно быть не отрицательным целым числом' : Number(((Math.random() * (max - min)) + min).toFixed(count));
 
+getRandomNumber(23, 26);
+getRandomFractionalNumber(1, 8, 4);
