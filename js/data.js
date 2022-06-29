@@ -1,4 +1,4 @@
-import { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, getAvatarLink} from './utils.js';
+import { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, getAvatarLink } from './utils.js';
 
 const COUNT_ADVERTISEMENTS = 1;
 const PRICE = {
@@ -23,11 +23,11 @@ const LOCATION_LNG = {
 };
 
 const TYPES_HOUSE = {
-  flat : 'Квартира',
-  bungalow:'Бунгало',
-  house:'Дом',
-  palace:'Дворец',
-  hotel:'Отель'
+  flat: 'Квартира',
+  bungalow: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец',
+  hotel: 'Отель'
 };
 
 const TITLES = ['Сдаётся посуточно', 'Сдаётся от 1 месяца'];
@@ -60,9 +60,11 @@ const createAdvertisement = (index) => ({
     lng: getRandomPositiveFloat(LOCATION_LNG.min, LOCATION_LNG.max),
   },
 });
-
-const ADVERTISEMENTS = [];
-for (let i = 1; i <= COUNT_ADVERTISEMENTS; i++) {
-  ADVERTISEMENTS.push(createAdvertisement(i));
-}
-export {ADVERTISEMENTS,TYPES_HOUSE};
+const createAdvertisements = () => {
+  const ADVERTISEMENTS = [];
+  for (let i = 1; i <= COUNT_ADVERTISEMENTS; i++) {
+    ADVERTISEMENTS.push(createAdvertisement(i));
+  }
+  return ADVERTISEMENTS;
+};
+export { createAdvertisements, TYPES_HOUSE};
