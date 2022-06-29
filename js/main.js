@@ -1,2 +1,3 @@
-import './create_advertisements.js';
-
+import {getRenderingAdvertisement} from './create_advertisements.js';
+import {createAdvertisements} from './data.js';
+getRenderingAdvertisement(createAdvertisements());
