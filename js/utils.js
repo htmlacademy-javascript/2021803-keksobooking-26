@@ -49,4 +49,31 @@ const getCorrectGrammar = (rooms,guests) => {
   }
   return `${rooms} ${correctRooms} для ${guests} ${correctGuests}`;
 };
-export { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, getAvatarLink,getCorrectGrammar};
+
+//Функция отрисовки особенностей объекта
+const createFeatures = (advertisementsElement,offer) => {
+  const featuresContainer = advertisementsElement.querySelector('.popup__features');
+  const featuresList = featuresContainer.querySelectorAll('.popup__feature');
+  featuresList.forEach((featuresListItem) => {
+    const isNecessary = offer.features.some ((feature) =>featuresListItem.classList.contains(`popup__feature--${  feature}` ),);
+    if (!isNecessary) {
+      featuresListItem.remove();
+    }
+  });
+};
+//Функция отрисовки фото объекта
+const createPhotos = (advertisementsElement,offer) =>{
+  const photos = advertisementsElement.querySelector('.popup__photos');
+  const photoElement = photos.querySelector('.popup__photo').cloneNode(true);
+  photos.querySelector('.popup__photo').remove();
+  for (let i = 0; i<offer.photos.length;i++){
+    if(offer.photos[i]){
+      photoElement.src = offer.photos[i];
+      photoElement.width = '45';
+      photoElement.height = '40';
+      photoElement.alt = 'Фотография жилья';
+      photos.appendChild(photoElement);}
+  }
+};
+
+export { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, getAvatarLink,getCorrectGrammar,createPhotos,createFeatures};
