@@ -1,28 +1,28 @@
 import { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, getAvatarLink } from './utils.js';
 
 const COUNT_ADVERTISEMENTS = 1;
-const PRICE = {
+const Price = {
   min: 0,
   max: 200000
 };
-const ROOMS = {
+const Rooms = {
   min: 1,
   max: 5
 };
-const GUESTS = {
+const Guests = {
   min: 1,
   max: 10
 };
-const LOCATION_LAT = {
+const LocationLat = {
   min: 35.65000,
   max: 35.70000
 };
-const LOCATION_LNG = {
+const LocationLng = {
   min: 139.70000,
   max: 139.80000
 };
 
-const TYPES_HOUSE = {
+const TypesHouse = {
   flat: 'Квартира',
   bungalow: 'Бунгало',
   house: 'Дом',
@@ -44,11 +44,11 @@ const createAdvertisement = (index) => ({
   },
   offer: {
     title: getRandomArrayElement(TITLES),
-    address: `${getRandomPositiveFloat(LOCATION_LAT.min, LOCATION_LAT.max)},${getRandomPositiveFloat(LOCATION_LNG.min, LOCATION_LNG.max)}`,
-    price: getRandomPositiveInteger(PRICE.min, PRICE.max),
+    address: `${getRandomPositiveFloat(LocationLat.min, LocationLat.max)},${getRandomPositiveFloat(LocationLng.min, LocationLng.max)}`,
+    price: getRandomPositiveInteger(Price.min, Price.max),
     type: getRandomArrayElement(TYPES),
-    rooms: getRandomPositiveInteger(ROOMS.min, ROOMS.max),
-    guests: getRandomPositiveInteger(GUESTS.min, GUESTS.max),
+    rooms: getRandomPositiveInteger(Rooms.min, Rooms.max),
+    guests: getRandomPositiveInteger(Guests.min, Guests.max),
     checkin: getRandomArrayElement(CHECKINS),
     checkout: getRandomArrayElement(CHECKOUTS),
     features: getRandomArray(FEATURES),
@@ -56,15 +56,15 @@ const createAdvertisement = (index) => ({
     photos: getRandomArray(PHOTOS),
   },
   location: {
-    lat: getRandomPositiveFloat(LOCATION_LAT.min, LOCATION_LAT.max),
-    lng: getRandomPositiveFloat(LOCATION_LNG.min, LOCATION_LNG.max),
+    lat: getRandomPositiveFloat(LocationLat.min, LocationLat.max),
+    lng: getRandomPositiveFloat(LocationLng.min, LocationLng.max),
   },
 });
 const createAdvertisements = () => {
-  const ADVERTISEMENTS = [];
+  const advertisements = [];
   for (let i = 1; i <= COUNT_ADVERTISEMENTS; i++) {
-    ADVERTISEMENTS.push(createAdvertisement(i));
+    advertisements.push(createAdvertisement(i));
   }
-  return ADVERTISEMENTS;
+  return advertisements;
 };
-export { createAdvertisements, TYPES_HOUSE};
+export { createAdvertisements, TypesHouse};

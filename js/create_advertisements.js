@@ -7,8 +7,8 @@ const templateAdvertisements = document.querySelector ('#card')
   .querySelector('.popup');
 
 const advertisementsFragment = document.createDocumentFragment();
-const getRenderingAdvertisement = (advertisement) => {
-  advertisement.forEach(({author, offer})=> {
+const getRenderingAdvertisement = (advertisements) => {
+  advertisements.forEach(({author, offer})=> {
     const advertisementsElement = templateAdvertisements.cloneNode(true);
     advertisementsElement.querySelector('.popup__avatar').src = author.avatar;
     advertisementsElement.querySelector('.popup__title').textContent = offer.title;
