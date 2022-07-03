@@ -1,4 +1,4 @@
-import {TYPES_HOUSE} from './data.js';
+import {TypesHouse} from './data.js';
 import {getCorrectGrammar,createPhotos,createFeatures} from './utils.js';
 
 const listAdvertisements = document.querySelector('#map-canvas');
@@ -14,7 +14,7 @@ const getRenderingAdvertisement = (advertisements) => {
     advertisementsElement.querySelector('.popup__title').textContent = offer.title;
     advertisementsElement.querySelector('.popup__text--address').textContent=offer.address;
     advertisementsElement.querySelector('.popup__text--price').textContent = `${offer.price} ₽/ночь`;
-    advertisementsElement.querySelector('.popup__type').textContent = TYPES_HOUSE[offer.type];
+    advertisementsElement.querySelector('.popup__type').textContent = TypesHouse[offer.type];
     advertisementsElement.querySelector('.popup__text--capacity').textContent = getCorrectGrammar(offer.rooms,offer.guests);
     advertisementsElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
     createFeatures(advertisementsElement,offer);
