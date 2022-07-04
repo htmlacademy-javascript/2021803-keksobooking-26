@@ -1,3 +1,6 @@
+// Функция изменения состояния страницы:
+// 0 - неактивное состояние
+// 1 - активное состояние
 const changeState = (state) => {
   const formAdvertisement = document.querySelector('.ad-form');
   const formFilterAdvertisement = document.querySelector('.map__filters');
