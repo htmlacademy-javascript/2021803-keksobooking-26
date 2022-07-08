@@ -48,6 +48,16 @@ const validateForm = () => {
   };
   pristine.addValidator(capacity, validateCountGuests, 'Данный вариант не подходит');
 
+  //Синхронизация времени заезда и выезда
+  const timeIn = form.querySelector('#timein');
+  const timeOut = form.querySelector('#timeout');
+
+  const validateTimeIn = () => {
+    timeIn.value=timeOut.value;
+  };
+  const validateTimeOut = () => {
+    timeOut.value=timeIn.value;
+  };
 
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -65,5 +75,7 @@ const validateForm = () => {
     price.placeholder = TypeHouseMinPrice[typeHouse.value];
     pristine.validate(price);
   });
+  timeIn.addEventListener('change',validateTimeOut);
+  timeOut.addEventListener('change',validateTimeIn);
 };
 export {validateForm};
