@@ -1,13 +1,13 @@
 import {TypesHouse} from './data.js';
 import {getCorrectGrammar,createPhotos,createFeatures} from './utils.js';
 
-const listAdvertisements = document.querySelector('#map-canvas');
+
 const templateAdvertisements = document.querySelector ('#card')
   .content
   .querySelector('.popup');
 
-const advertisementsFragment = document.createDocumentFragment();
 const getRenderingAdvertisement = (advertisements) => {
+  const advertisementsFragment = document.createDocumentFragment();
   advertisements.forEach(({author, offer})=> {
     const advertisementsElement = templateAdvertisements.cloneNode(true);
     advertisementsElement.querySelector('.popup__avatar').src = author.avatar;
@@ -20,8 +20,8 @@ const getRenderingAdvertisement = (advertisements) => {
     createFeatures(advertisementsElement,offer);
     createPhotos(advertisementsElement,offer);
     advertisementsElement.querySelector('.popup__description').textContent = offer.description;
-    advertisementsFragment.appendChild(advertisementsElement);
+    advertisementsFragment.append(advertisementsElement);
   });
-  return listAdvertisements.appendChild(advertisementsFragment);
+  return advertisementsFragment;
 };
 export {getRenderingAdvertisement};

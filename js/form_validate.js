@@ -1,3 +1,12 @@
+const MAX_PRICE = 100000;
+const TypeHouseMinPrice = {
+  bungalow: 0,
+  flat: 1000,
+  hotel: 3000,
+  house: 5000,
+  palace: 10000,
+};
+
 const validateForm = () => {
   const form = document.querySelector('.ad-form');
 
@@ -17,14 +26,6 @@ const validateForm = () => {
   pristine.addValidator(form.querySelector('#title'), validateTitle, `Длина заголовка должна быть от ${LengthTitle.minLength} до ${LengthTitle.maxLength} символов`);
 
   //Проверка цены за ночь (Максимальное значение - 100000)
-  const MAX_PRICE = 100000;
-  const TypeHouseMinPrice = {
-    bungalow: 0,
-    flat: 1000,
-    hotel: 3000,
-    house: 5000,
-    palace: 10000,
-  };
   const price = form.querySelector('#price');
   const typeHouse = form.querySelector('#type');
 
@@ -72,10 +73,48 @@ const validateForm = () => {
   });
   typeHouse.addEventListener('change', (evt) => {
     evt.preventDefault();
-    price.placeholder = TypeHouseMinPrice[typeHouse.value];
+    price.value = TypeHouseMinPrice[typeHouse.value];
     pristine.validate(price);
   });
   timeIn.addEventListener('change',validateTimeOut);
   timeOut.addEventListener('change',validateTimeIn);
+
+  //Управление слайдером для цены.
+  const sliderElement = document.querySelector('.ad-form__slider');
+  noUiSlider.create(sliderElement, {
+    range: {
+      min: TypeHouseMinPrice[typeHouse.value],
+      max: MAX_PRICE,
+    },
+    start: TypeHouseMinPrice[typeHouse.value],
+    step: 1,
+    connect: 'lower',
+    format: {
+      to: function (value) {
+        if (Number.isInteger(value)) {
+          return value;
+        }
+        return value.toFixed(0);
+      },
+      from: function (value) {
+        return Number(value);
+      }
+    },
+  });
+
+  sliderElement.noUiSlider.on('update', () => {
+    price.value = sliderElement.noUiSlider.get();
+  });
+  typeHouse.addEventListener('change', (evt) => {
+    evt.preventDefault();
+    sliderElement.noUiSlider.updateOptions({
+      range: {
+        min: TypeHouseMinPrice[typeHouse.value],
+        max: MAX_PRICE
+      },
+      start: TypeHouseMinPrice[typeHouse.value],
+      step: 1
+    });
+  });
 };
 export {validateForm};

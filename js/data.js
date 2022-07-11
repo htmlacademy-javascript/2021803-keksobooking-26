@@ -1,6 +1,6 @@
 import { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, getAvatarLink } from './utils.js';
 
-const COUNT_ADVERTISEMENTS = 1;
+const COUNT_ADVERTISEMENTS = 5;
 const Price = {
   min: 0,
   max: 200000
@@ -30,7 +30,7 @@ const TypesHouse = {
   hotel: 'Отель'
 };
 
-const TITLES = ['Сдаётся посуточно', 'Сдаётся от 1 месяца'];
+const TITLES = ['Квартира', 'Пентхаус', 'Шикарные апартаменты','Дом'];
 const TYPES = ['palace', 'flat', 'house', 'bungalow', 'hotel'];
 const CHECKINS = ['12:00', '13:00', '14:00'];
 const CHECKOUTS = ['12:00', '13:00', '14:00'];

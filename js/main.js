@@ -1,7 +1,6 @@
-import {getRenderingAdvertisement} from './create_advertisements.js';
-import {createAdvertisements} from './data.js';
 import {changeState} from './form_state.js';
+changeState(0);
 import {validateForm} from './form_validate.js';
-getRenderingAdvertisement(createAdvertisements());
-changeState(1);
+import {getMap} from './map.js';
+getMap();
 validateForm();
