@@ -1,14 +1,23 @@
-const getData = (onSuccess) => {
-  fetch('https://26.javascript.pages.academy/keksobooking/data')
-    .then((response) => response.json())
+const serverAddressGetData = 'https://26.javascript.pages.academy/keksobooking/data';
+const serverAddressSendData = 'https://26.javascript.pages.academ/keksobooking';
+
+const getData = (onSuccess,onFail) => {
+  fetch(serverAddressGetData)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Ошибка загрузки данных с сервера');
+      }
+      return response.json();
+    })
     .then((advertisements) => {
       onSuccess(advertisements);
-    });
+    })
+    .catch ( (err) =>
+      onFail(err.message) );
 };
 
 const sendData = (onSuccess, onFail, body) => {
-  fetch(
-    'https://26.javascript.pages.academ/keksobooking',
+  fetch(serverAddressSendData,
     {
       method: 'POST',
       body,
