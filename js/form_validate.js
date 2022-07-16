@@ -131,9 +131,9 @@ const unblockSubmitButton = () => {
   buttonForm.textContent = 'Сохранить';
 };
 
-const AdsForm = document.querySelector('.ad-form');
+const adsForm = document.querySelector('.ad-form');
 const setAdsFormSubmit = (onSuccess) => {
-  AdsForm.addEventListener('submit', (evt) => {
+  adsForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
@@ -148,7 +148,6 @@ const setAdsFormSubmit = (onSuccess) => {
           showAlert('Не удалось отправить форму. Попробуйте ещё раз');
           unblockSubmitButton();
         },
-        new FormData(evt.target),
       );
     }
   });
