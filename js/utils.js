@@ -55,9 +55,11 @@ const createFeatures = (advertisementsElement,offer) => {
   const featuresContainer = advertisementsElement.querySelector('.popup__features');
   const featuresList = featuresContainer.querySelectorAll('.popup__feature');
   featuresList.forEach((featuresListItem) => {
-    const isNecessary = offer.features.some ((feature) =>featuresListItem.classList.contains(`popup__feature--${  feature}` ),);
-    if (!isNecessary) {
-      featuresListItem.remove();
+    if (offer.features){
+      const isNecessary = offer.features.some ((feature) =>featuresListItem.classList.contains(`popup__feature--${  feature}` ),);
+      if (!isNecessary) {
+        featuresListItem.remove();
+      }
     }
   });
 };
@@ -66,14 +68,38 @@ const createPhotos = (advertisementsElement,offer) =>{
   const photos = advertisementsElement.querySelector('.popup__photos');
   const photoElement = photos.querySelector('.popup__photo').cloneNode(true);
   photos.querySelector('.popup__photo').remove();
-  for (let i = 0; i<offer.photos.length;i++){
-    if(offer.photos[i]){
-      photoElement.src = offer.photos[i];
-      photoElement.width = '45';
-      photoElement.height = '40';
-      photoElement.alt = 'Фотография жилья';
-      photos.appendChild(photoElement);}
+  if(offer.photos){
+    for (let i = 0; i<offer.photos.length;i++){
+      if(offer.photos[i]){
+        photoElement.src = offer.photos[i];
+        photoElement.width = '45';
+        photoElement.height = '40';
+        photoElement.alt = 'Фотография жилья';
+        photos.appendChild(photoElement);}
+    }
   }
 };
 
-export { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, getAvatarLink,getCorrectGrammar,createPhotos,createFeatures};
+//Формат окна ошибки
+const ALERT_SHOW_TIME = 5000;
+const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = '100';
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '0';
+  alertContainer.style.right = '0';
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+};
+export { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, getAvatarLink,getCorrectGrammar,createPhotos,createFeatures,showAlert};

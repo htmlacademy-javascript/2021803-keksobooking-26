@@ -1,5 +1,4 @@
 import {changeState} from './form_state.js';
-import {createAdvertisements} from './data.js';
 import {getRenderingAdvertisement} from './create_advertisements.js';
 
 const resetButton = document.querySelector('.ad-form__reset');
@@ -9,7 +8,7 @@ const DefaultAddress ={
   lng: 139.692
 };
 const DEFAULT_ZOOM = '12';
-const getMap = () => {
+const getMap = (advertisements) => {
   const map = L.map('map-canvas')
     .on('load', () => {
       changeState(1);
@@ -54,8 +53,7 @@ const getMap = () => {
   });
 
   const markerGroup = L.layerGroup().addTo(map);
-  const advertisements = createAdvertisements();
-  const advertisementsFragment = getRenderingAdvertisement(createAdvertisements());
+  const advertisementsFragment = getRenderingAdvertisement(advertisements);
 
   for (let i = 0; i< advertisements.length; i++){
     const marker = L.marker(

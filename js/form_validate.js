@@ -1,3 +1,7 @@
+import {sendData} from './api.js';
+import {showAlert} from './utils.js';
+const form = document.querySelector('.ad-form');
+
 const MAX_PRICE = 100000;
 const TypeHouseMinPrice = {
   bungalow: 0,
@@ -7,15 +11,13 @@ const TypeHouseMinPrice = {
   palace: 10000,
 };
 
+const pristine = new Pristine(form, {
+  classTo: 'ad-form__element',
+  errorTextParent: 'ad-form__element',
+  errorTextClass: 'ad-form__error_text'
+});
+
 const validateForm = () => {
-  const form = document.querySelector('.ad-form');
-
-  const pristine = new Pristine(form, {
-    classTo: 'ad-form__element',
-    errorTextParent: 'ad-form__element',
-    errorTextClass: 'ad-form__error_text'
-  });
-
   //Проверка заголовка объявления (длина заголовка от 30 до 100 символов)
   const LengthTitle = {
     minLength : 30,
@@ -117,4 +119,37 @@ const validateForm = () => {
     });
   });
 };
-export {validateForm};
+
+
+const buttonForm = form.querySelector('.ad-form__submit');
+const blockSubmitButton = () => {
+  buttonForm.disabled = true;
+  buttonForm.textContent = 'Публикую...';
+};
+const unblockSubmitButton = () => {
+  buttonForm.disabled = false;
+  buttonForm.textContent = 'Сохранить';
+};
+
+const adsForm = document.querySelector('.ad-form');
+const setAdsFormSubmit = (onSuccess) => {
+  adsForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendData(
+        () => {
+          onSuccess();
+          unblockSubmitButton();
+        },
+        () => {
+          showAlert('Не удалось отправить форму. Попробуйте ещё раз');
+          unblockSubmitButton();
+        },
+      );
+    }
+  });
+};
+export {validateForm,setAdsFormSubmit};
