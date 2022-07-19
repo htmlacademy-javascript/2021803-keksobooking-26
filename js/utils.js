@@ -19,7 +19,8 @@ const getRandomArrayElement = (elements) => elements[getRandomPositiveInteger(0,
 
 //Функция получения случайного массива
 const getRandomArray = (elements) => {
-  const ARRAY_LENGTH = getRandomPositiveInteger(0, elements.length - 1);
+  //const ARRAY_LENGTH = getRandomPositiveInteger(0, elements.length - 1);
+  const ARRAY_LENGTH = 10;
   const NEW_ARRAY = [];
 
   for (let i = 0; i < ARRAY_LENGTH; i++) {
@@ -102,4 +103,12 @@ const showAlert = (message) => {
     alertContainer.remove();
   }, ALERT_SHOW_TIME);
 };
-export { getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, getAvatarLink,getCorrectGrammar,createPhotos,createFeatures,showAlert};
+
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+export {getRandomPositiveInteger, getRandomPositiveFloat, getRandomArrayElement, getRandomArray, getAvatarLink,getCorrectGrammar,createPhotos,createFeatures,showAlert,debounce};

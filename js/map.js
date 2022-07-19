@@ -8,53 +8,55 @@ const DefaultAddress ={
   lng: 139.692
 };
 const DEFAULT_ZOOM = '12';
-const getMap = (advertisements) => {
-  const map = L.map('map-canvas')
-    .on('load', () => {
-      changeState(1);
-    })
-    .setView({
-      lat: DefaultAddress.lat,
-      lng: DefaultAddress.lng,
-    }, DEFAULT_ZOOM);
 
-  address.value = `${DefaultAddress.lat.toFixed(5)},${DefaultAddress.lng.toFixed(5)}`;
-  L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    },
-  ).addTo(map);
-  const mainPinIcon = L.icon({
-    iconUrl: './img/main-pin.svg',
-    iconSize: [52, 52],
-    iconAnchor: [26, 52],
-  });
+const map = L.map('map-canvas')
+  .on('load', () => {
+  })
+  .setView({
+    lat: DefaultAddress.lat,
+    lng: DefaultAddress.lng,
+  }, DEFAULT_ZOOM);
 
-  const mainPinMarker = L.marker(
-    {
-      lat: DefaultAddress.lat,
-      lng: DefaultAddress.lng,
-    },
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
-  mainPinMarker.addTo(map);
-  mainPinMarker.on('moveend', (evt) => {
-    const coordinates = evt.target.getLatLng();
-    address.value = `${coordinates.lat.toFixed(5)},${coordinates.lng.toFixed(5)}`;
-  });
-  const icon = L.icon({
-    iconUrl: './img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-  });
+address.value = `${DefaultAddress.lat.toFixed(5)},${DefaultAddress.lng.toFixed(5)}`;
+L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
+).addTo(map);
 
-  const markerGroup = L.layerGroup().addTo(map);
+const mainPinIcon = L.icon({
+  iconUrl: './img/main-pin.svg',
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
+});
+
+const mainPinMarker = L.marker(
+  {
+    lat: DefaultAddress.lat,
+    lng: DefaultAddress.lng,
+  },
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+mainPinMarker.addTo(map);
+mainPinMarker.on('moveend', (evt) => {
+  const coordinates = evt.target.getLatLng();
+  address.value = `${coordinates.lat.toFixed(5)},${coordinates.lng.toFixed(5)}`;
+});
+const icon = L.icon({
+  iconUrl: './img/pin.svg',
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+});
+
+const markerGroup = L.layerGroup().addTo(map);
+const createMarker = (advertisements) => {
+  markerGroup.clearLayers();
   const advertisementsFragment = getRenderingAdvertisement(advertisements);
-
+  changeState(1);
   for (let i = 0; i< advertisements.length; i++){
     const marker = L.marker(
       {
@@ -81,4 +83,4 @@ const getMap = (advertisements) => {
     }, 10);
   });
 };
-export {getMap};
+export {createMarker};
