@@ -1035,3 +1035,6 @@ fieldset {
 .hidden {
   display: none;
 }
+input:focus::placeholder{
+  opacity: 0;
+}

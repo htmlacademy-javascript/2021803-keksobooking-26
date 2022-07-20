@@ -1,4 +1,4 @@
-const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+const FILES_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 const fileChooserAvatar = document.querySelector('#avatar');
 const previewAvatar = document.querySelector('#avatar-img');
@@ -10,7 +10,7 @@ const uploadFile = () => {
     const file = fileChooserAvatar.files[0];
     const fileName = file.name.toLowerCase();
 
-    const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+    const matches = FILES_TYPES.some((it) => fileName.endsWith(it));
 
     if (matches) {
       previewAvatar.src = URL.createObjectURL(file);
@@ -21,7 +21,7 @@ const uploadFile = () => {
     const file = fileChooserPhoto.files[0];
     const fileName = file.name.toLowerCase();
 
-    const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+    const matches = FILES_TYPES.some((it) => fileName.endsWith(it));
 
     if (matches) {
       const image = document.createElement('img');
