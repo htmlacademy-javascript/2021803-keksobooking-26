@@ -1,6 +1,6 @@
-import {changeState} from './form_state.js';
+import {changeState} from './form-state.js';
 changeState(0);
-import {validateForm,setAdsFormSubmit} from './form_validate.js';
+import {validateForm,setAdsFormSubmit} from './form-validate.js';
 import {createMarker} from './map.js';
 import {getData} from './api.js';
 import {getRandomArray,debounce} from './utils.js';
