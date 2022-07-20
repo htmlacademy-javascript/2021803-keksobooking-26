@@ -5,7 +5,9 @@ import {createMarker} from './map.js';
 import {getData} from './api.js';
 import {getRandomArray,debounce} from './utils.js';
 import {addEventChangeFilter,filterAdvertisements} from './filter.js';
+import {uploadFile} from './file.js';
 
+uploadFile();
 validateForm();
 const RERENDER_DELAY = 500;
 getData((advertisements) => {
