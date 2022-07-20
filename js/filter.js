@@ -1,4 +1,4 @@
-import {PriceLimit} from './data.js';
+import {PricesLimit} from './data.js';
 const MAX_ADVERTISEMENTS = 10;
 
 const filterForm = document.querySelector('.map__filters');
@@ -10,7 +10,7 @@ const filterFeatures = [...document.querySelectorAll('#housing-features [type="c
 let listFeatures = [];
 
 const checkTypeHouse = (ads) => (filterHouseType.value === 'any' || ads.offer.type === filterHouseType.value);
-const checkPriceLimit = (value) => (PriceLimit[filterHousingPrice.value][0] <= value && PriceLimit[filterHousingPrice.value][1] > value);
+const checkPriceLimit = (value) => (PricesLimit[filterHousingPrice.value][0] <= value && PricesLimit[filterHousingPrice.value][1] > value);
 const checkPriceHouse = (ads) => ads.offer.price ? checkPriceLimit(ads.offer.price) : filterHousingPrice.value === 'any';
 const checkRoomCount = (ads) => (filterHousingRooms.value === 'any' || ads.offer.rooms === +filterHousingRooms.value);
 const checkGuestCount = (ads) => (filterHousingGuests.value === 'any' || ads.offer.guests === +filterHousingGuests.value);

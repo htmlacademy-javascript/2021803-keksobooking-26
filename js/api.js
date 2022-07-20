@@ -1,5 +1,8 @@
+//Получение и отправка данных на сервер
 const serverAddressGetData = 'https://26.javascript.pages.academy/keksobooking/data';
-const serverAddressSendData = 'https://26.javascript.pages.academ/keksobooking';
+const serverAddressSendData = 'https://26.javascript.pages.academy/keksobooking';
+const errorTemplateElement = document.querySelector('#error').content.querySelector('.error');
+const successTemplateElement = document.querySelector('#success').content.querySelector('.success');
 
 const getData = (onSuccess,onFail) => {
   fetch(serverAddressGetData)
@@ -34,4 +37,58 @@ const sendData = (onSuccess, onFail, body) => {
       onFail('Не удалось отправить форму. Попробуйте ещё раз');
     });
 };
-export {getData,sendData};
+
+//Создание окна ошибки и успешной загрузки ( с обработчиками)
+const onErrorButtonClick = (formContainer) => {
+  const errorButton = formContainer.querySelector('.error__button');
+  errorButton.addEventListener(
+    'click',
+    () => {
+      formContainer.remove();
+    },
+    { once: true },
+  );
+};
+
+const onPopupEscKeydown = (formContainer) => {
+  window.addEventListener(
+    'keydown',
+    (evt) => {
+      const key = evt.key;
+      if (key === 'Escape') {
+        formContainer.remove();
+      }
+    },
+    { once: true },
+  );
+};
+
+const onPopupClick = (formContainer) => {
+  document.addEventListener(
+    'click',
+    () => {
+      formContainer.remove();
+    },
+    { once: true },
+  );
+};
+
+const createErrorMessage = () => {
+  const errorElement = errorTemplateElement.cloneNode(true);
+  document.body.append(errorElement);
+
+  onErrorButtonClick(errorElement);
+  onPopupEscKeydown(errorElement);
+  onPopupClick(errorElement);
+};
+
+const createSuccessMessage = () => {
+  const successElement = successTemplateElement.cloneNode(true);
+  document.body.append(successElement);
+
+  onPopupEscKeydown(successElement);
+  onPopupClick(successElement);
+};
+
+
+export {getData,sendData,createErrorMessage,createSuccessMessage};

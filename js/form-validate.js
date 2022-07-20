@@ -1,7 +1,14 @@
-import {sendData} from './api.js';
-import {showAlert} from './utils.js';
+import {sendData,createErrorMessage,createSuccessMessage} from './api.js';
 const form = document.querySelector('.ad-form');
-
+const price = form.querySelector('#price');
+const typeHouse = form.querySelector('#type');
+const rooms = form.querySelector('#room_number');
+const capacity = form.querySelector('#capacity');
+const timeIn = form.querySelector('#timein');
+const timeOut = form.querySelector('#timeout');
+const sliderElement = document.querySelector('.ad-form__slider');
+const buttonForm = form.querySelector('.ad-form__submit');
+const adsForm = document.querySelector('.ad-form');
 const MAX_PRICE = 100000;
 const TypeHouseMinPrice = {
   bungalow: 0,
@@ -9,6 +16,12 @@ const TypeHouseMinPrice = {
   hotel: 3000,
   house: 5000,
   palace: 10000,
+};
+const MatchingRoomsGuests = {
+  1 : ['1'],
+  2 : ['1','2'],
+  3 : ['1','2','3'],
+  100: ['0']
 };
 
 const pristine = new Pristine(form, {
@@ -28,23 +41,11 @@ const validateForm = () => {
   pristine.addValidator(form.querySelector('#title'), validateTitle, `Длина заголовка должна быть от ${LengthTitle.minLength} до ${LengthTitle.maxLength} символов`);
 
   //Проверка цены за ночь (Максимальное значение - 100000)
-  const price = form.querySelector('#price');
-  const typeHouse = form.querySelector('#type');
-
   const validatePrice = (value) => value >= TypeHouseMinPrice[typeHouse.value] && value <= MAX_PRICE;
   const errorValidatePrice = () => `Цена за ночь должна быть от ${TypeHouseMinPrice[typeHouse.value]} до ${MAX_PRICE}`;
   pristine.addValidator(price, validatePrice, errorValidatePrice);
 
   //Проверка количества комнат и гостей
-  const MatchingRoomsGuests = {
-    1 : ['1'],
-    2 : ['1','2'],
-    3 : ['1','2','3'],
-    100: ['0']
-  };
-  const rooms = form.querySelector('#room_number');
-  const capacity = form.querySelector('#capacity');
-
   const validateCountGuests = () => {
     const selectNumberRooms = MatchingRoomsGuests[rooms.value];
     return selectNumberRooms.includes(capacity.value);
@@ -52,9 +53,6 @@ const validateForm = () => {
   pristine.addValidator(capacity, validateCountGuests, 'Данный вариант не подходит');
 
   //Синхронизация времени заезда и выезда
-  const timeIn = form.querySelector('#timein');
-  const timeOut = form.querySelector('#timeout');
-
   const validateTimeIn = () => {
     timeIn.value=timeOut.value;
   };
@@ -69,20 +67,21 @@ const validateForm = () => {
       form.submit();
     }
   });
+
   rooms.addEventListener('change', (evt) => {
     evt.preventDefault();
     pristine.validate(capacity);
   });
+
   typeHouse.addEventListener('change', (evt) => {
     evt.preventDefault();
-    price.value = TypeHouseMinPrice[typeHouse.value];
     pristine.validate(price);
   });
+
   timeIn.addEventListener('change',validateTimeOut);
   timeOut.addEventListener('change',validateTimeIn);
 
   //Управление слайдером для цены.
-  const sliderElement = document.querySelector('.ad-form__slider');
   noUiSlider.create(sliderElement, {
     range: {
       min: TypeHouseMinPrice[typeHouse.value],
@@ -120,18 +119,15 @@ const validateForm = () => {
   });
 };
 
-
-const buttonForm = form.querySelector('.ad-form__submit');
 const blockSubmitButton = () => {
   buttonForm.disabled = true;
   buttonForm.textContent = 'Публикую...';
 };
 const unblockSubmitButton = () => {
   buttonForm.disabled = false;
-  buttonForm.textContent = 'Сохранить';
+  buttonForm.textContent = 'Опубликовать';
 };
 
-const adsForm = document.querySelector('.ad-form');
 const setAdsFormSubmit = (onSuccess) => {
   adsForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -142,10 +138,11 @@ const setAdsFormSubmit = (onSuccess) => {
       sendData(
         () => {
           onSuccess();
+          createSuccessMessage();
           unblockSubmitButton();
         },
         () => {
-          showAlert('Не удалось отправить форму. Попробуйте ещё раз');
+          createErrorMessage();
           unblockSubmitButton();
         },
       );

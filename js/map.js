@@ -1,5 +1,5 @@
-import {changeState} from './form_state.js';
-import {getRenderingAdvertisement} from './create_advertisements.js';
+import {changeState} from './form-state.js';
+import {getRenderingAdvertisement} from './create-advertisements.js';
 
 const resetButton = document.querySelector('.ad-form__reset');
 const address = document.querySelector('#address');
