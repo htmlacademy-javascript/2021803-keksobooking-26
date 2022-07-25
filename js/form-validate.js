@@ -1,4 +1,9 @@
-import {sendData,createErrorMessage,createSuccessMessage} from './api.js';
+import {sendData} from './api.js';
+import {resetMap,createMapAds} from './map.js';
+import {resetFile} from './file.js';
+
+
+const resetButton = document.querySelector('.ad-form__reset');
 const form = document.querySelector('.ad-form');
 const price = form.querySelector('#price');
 const typeHouse = form.querySelector('#type');
@@ -9,7 +14,9 @@ const timeOut = form.querySelector('#timeout');
 const sliderElement = document.querySelector('.ad-form__slider');
 const buttonForm = form.querySelector('.ad-form__submit');
 const adsForm = document.querySelector('.ad-form');
+const MIN_PRICE = 0;
 const MAX_PRICE = 100000;
+const START_SLIDER = 1000;
 const TypeHouseMinPrice = {
   bungalow: 0,
   flat: 1000,
@@ -42,8 +49,8 @@ const validateForm = () => {
 
   //Проверка цены за ночь (Максимальное значение - 100000)
   const validatePrice = (value) => value >= TypeHouseMinPrice[typeHouse.value] && value <= MAX_PRICE;
-  const errorValidatePrice = () => `Цена за ночь должна быть от ${TypeHouseMinPrice[typeHouse.value]} до ${MAX_PRICE}`;
-  pristine.addValidator(price, validatePrice, errorValidatePrice);
+  const getErrorPriceValidation = () => `Цена за ночь должна быть от ${TypeHouseMinPrice[typeHouse.value]} до ${MAX_PRICE}`;
+  pristine.addValidator(price, validatePrice, getErrorPriceValidation);
 
   //Проверка количества комнат и гостей
   const validateCountGuests = () => {
@@ -59,14 +66,6 @@ const validateForm = () => {
   const validateTimeOut = () => {
     timeOut.value=timeIn.value;
   };
-
-  form.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    const isValid = pristine.validate();
-    if (isValid) {
-      form.submit();
-    }
-  });
 
   rooms.addEventListener('change', (evt) => {
     evt.preventDefault();
@@ -84,36 +83,35 @@ const validateForm = () => {
   //Управление слайдером для цены.
   noUiSlider.create(sliderElement, {
     range: {
-      min: TypeHouseMinPrice[typeHouse.value],
+      min: MIN_PRICE,
       max: MAX_PRICE,
     },
-    start: TypeHouseMinPrice[typeHouse.value],
+    start: START_SLIDER,
     step: 1,
     connect: 'lower',
     format: {
       to: function (value) {
-        if (Number.isInteger(value)) {
-          return value;
-        }
-        return value.toFixed(0);
+        return Number.isInteger(value) ? value : value.toFixed(0);
       },
       from: function (value) {
         return Number(value);
-      }
+      },
     },
   });
 
   sliderElement.noUiSlider.on('update', () => {
     price.value = sliderElement.noUiSlider.get();
+    pristine.validate(price);
   });
   typeHouse.addEventListener('change', (evt) => {
     evt.preventDefault();
+    price.placeholder = TypeHouseMinPrice[typeHouse.value];
     sliderElement.noUiSlider.updateOptions({
       range: {
-        min: TypeHouseMinPrice[typeHouse.value],
+        min: MIN_PRICE,
         max: MAX_PRICE
       },
-      start: TypeHouseMinPrice[typeHouse.value],
+      start: price.value,
       step: 1
     });
   });
@@ -128,25 +126,33 @@ const unblockSubmitButton = () => {
   buttonForm.textContent = 'Опубликовать';
 };
 
-const setAdsFormSubmit = (onSuccess) => {
+const resetForm = () => {
+  form.reset();
+  pristine.reset();
+  resetMap();
+  resetFile();
+  sliderElement.noUiSlider.updateOptions({
+    start: START_SLIDER,
+    padding: MIN_PRICE,
+  });
+  createMapAds();
+};
+
+resetButton.addEventListener('click', (evt)=>{
+  evt.preventDefault();
+  resetForm();
+});
+
+const setAdsFormSubmit = () => {
   adsForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-
     const isValid = pristine.validate();
+    const formData = new FormData(evt.target);
     if (isValid) {
-      blockSubmitButton();
-      sendData(
-        () => {
-          onSuccess();
-          createSuccessMessage();
-          unblockSubmitButton();
-        },
-        () => {
-          createErrorMessage();
-          unblockSubmitButton();
-        },
-      );
+      sendData(formData);
+      resetForm();
     }
   });
 };
-export {validateForm,setAdsFormSubmit};
+
+export {validateForm,setAdsFormSubmit,blockSubmitButton,unblockSubmitButton};

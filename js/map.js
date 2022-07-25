@@ -1,7 +1,10 @@
-import {changeState} from './form-state.js';
+import {setActiveForm} from './form-state.js';
 import {getRenderingAdvertisement} from './create-advertisements.js';
+import {getData} from './api.js';
+import {getRandomArray,debounce} from './utils.js';
+import {addEventChangeFilter,filterAdvertisements,resetMapFilters} from './filter.js';
 
-const resetButton = document.querySelector('.ad-form__reset');
+const RERENDER_DELAY = 500;
 const address = document.querySelector('#address');
 const DefaultAddress ={
   lat: 35.6895,
@@ -11,6 +14,7 @@ const DEFAULT_ZOOM = '12';
 
 const map = L.map('map-canvas')
   .on('load', () => {
+    setActiveForm();
   })
   .setView({
     lat: DefaultAddress.lat,
@@ -56,7 +60,6 @@ const markerGroup = L.layerGroup().addTo(map);
 const createMarker = (advertisements) => {
   markerGroup.clearLayers();
   const advertisementsFragment = getRenderingAdvertisement(advertisements);
-  changeState(1);
   for (let i = 0; i< advertisements.length; i++){
     const marker = L.marker(
       {
@@ -71,16 +74,25 @@ const createMarker = (advertisements) => {
       .addTo(markerGroup)
       .bindPopup(advertisementsFragment.children[i]);
   }
+};
+const resetMap = () => {
+  mainPinMarker.setLatLng({
+    lat: DefaultAddress.lat,
+    lng: DefaultAddress.lng,
+  });
+  map.setView({
+    lat: DefaultAddress.lat,
+    lng: DefaultAddress.lng,
+  }, 10);
+  address.value = `${DefaultAddress.lat.toFixed(5)},${DefaultAddress.lng.toFixed(5)}`;
+  resetMapFilters();
+};
 
-  resetButton.addEventListener('click', () => {
-    mainPinMarker.setLatLng({
-      lat: DefaultAddress.lat,
-      lng: DefaultAddress.lng,
-    });
-    map.setView({
-      lat: DefaultAddress.lat,
-      lng: DefaultAddress.lng,
-    }, 10);
+//Отрисовка готовой карты с объявлениями
+const createMapAds = () => {
+  getData((advertisements) => {
+    createMarker(getRandomArray(advertisements));
+    addEventChangeFilter (debounce ( () => createMarker(filterAdvertisements(advertisements)),RERENDER_DELAY));
   });
 };
-export {createMarker};
+export {createMapAds,resetMap};

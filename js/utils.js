@@ -1,3 +1,6 @@
+const errorTemplateElement = document.querySelector('#error').content.querySelector('.error');
+const successTemplateElement = document.querySelector('#success').content.querySelector('.success');
+
 //Функция получения рандомного целого числа из диапазона
 const getRandomPositiveInteger = (a, b) => {
   const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
@@ -80,4 +83,58 @@ const debounce = (callback, timeoutDelay) => {
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
 };
-export {getRandomArrayElement, getRandomArray, getAvatarLink,getCorrectGrammar,createPhotos,createFeatures,debounce};
+
+//Создание окна ошибки и успешной загрузки ( с обработчиками)
+const onErrorButtonClick = (formContainer) => {
+  const errorButton = formContainer.querySelector('.error__button');
+  errorButton.addEventListener(
+    'click',
+    () => {
+      formContainer.remove();
+    },
+    { once: true },
+  );
+};
+
+const onPopupEscKeydown = (formContainer) => {
+  window.addEventListener(
+    'keydown',
+    (evt) => {
+      const key = evt.key;
+      if (key === 'Escape') {
+        formContainer.remove();
+        window.removeEventListener('keydown', (evt));
+      }
+    },
+  );
+};
+
+const onPopupClick = (formContainer) => {
+  document.addEventListener(
+    'click',
+    () => {
+      formContainer.remove();
+    },
+    { once: true },
+  );
+};
+
+const createErrorMessage = (textError) => {
+  const errorElement = errorTemplateElement.cloneNode(true);
+  errorElement.querySelector('.error__message').textContent = textError;
+  document.body.append(errorElement);
+
+  onErrorButtonClick(errorElement);
+  onPopupEscKeydown(errorElement);
+  onPopupClick(errorElement);
+};
+
+const createSuccessMessage = () => {
+  const successElement = successTemplateElement.cloneNode(true);
+  document.body.append(successElement);
+
+  onPopupEscKeydown(successElement);
+  onPopupClick(successElement);
+};
+
+export {getRandomArrayElement, getRandomArray, getAvatarLink,getCorrectGrammar,createPhotos,createFeatures,debounce,createErrorMessage,createSuccessMessage};
