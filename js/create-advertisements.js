@@ -1,6 +1,12 @@
-import {TypesHouse} from './data.js';
 import {getCorrectGrammar,createPhotos,createFeatures} from './utils.js';
 
+const TypesHouse = {
+  flat: 'Квартира',
+  bungalow: 'Бунгало',
+  house: 'Дом',
+  palace: 'Дворец',
+  hotel: 'Отель'
+};
 
 const templateAdvertisements = document.querySelector ('#card')
   .content

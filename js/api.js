@@ -1,25 +1,28 @@
+import {setActiveMapFilters} from './form-state.js';
+import {blockSubmitButton,unblockSubmitButton} from './form-validate.js';
+
 //Получение и отправка данных на сервер
 const serverAddressGetData = 'https://26.javascript.pages.academy/keksobooking/data';
 const serverAddressSendData = 'https://26.javascript.pages.academy/keksobooking';
-const errorTemplateElement = document.querySelector('#error').content.querySelector('.error');
-const successTemplateElement = document.querySelector('#success').content.querySelector('.success');
 
-const getData = (onSuccess,onFail) => {
+const getData = (onSuccess,onError) => {
   fetch(serverAddressGetData)
     .then((response) => {
       if (!response.ok) {
         throw new Error('Ошибка загрузки данных с сервера');
       }
+      setActiveMapFilters();
       return response.json();
     })
     .then((advertisements) => {
       onSuccess(advertisements);
     })
     .catch ( (err) =>
-      onFail(err.message) );
+      onError(err.message));
 };
 
-const sendData = (onSuccess, onFail, body) => {
+const sendData = (onSuccess,onError,body) => {
+  blockSubmitButton();
   fetch(serverAddressSendData,
     {
       method: 'POST',
@@ -30,65 +33,13 @@ const sendData = (onSuccess, onFail, body) => {
       if (response.ok) {
         onSuccess();
       } else {
-        onFail('Не удалось отправить форму. Попробуйте ещё раз');
+        throw new Error('Не удалось отправить форму. Попробуйте ещё раз');
       }
     })
-    .catch(() => {
-      onFail('Не удалось отправить форму. Попробуйте ещё раз');
-    });
-};
-
-//Создание окна ошибки и успешной загрузки ( с обработчиками)
-const onErrorButtonClick = (formContainer) => {
-  const errorButton = formContainer.querySelector('.error__button');
-  errorButton.addEventListener(
-    'click',
-    () => {
-      formContainer.remove();
-    },
-    { once: true },
-  );
-};
-
-const onPopupEscKeydown = (formContainer) => {
-  window.addEventListener(
-    'keydown',
-    (evt) => {
-      const key = evt.key;
-      if (key === 'Escape') {
-        formContainer.remove();
-      }
-    },
-    { once: true },
-  );
-};
-
-const onPopupClick = (formContainer) => {
-  document.addEventListener(
-    'click',
-    () => {
-      formContainer.remove();
-    },
-    { once: true },
-  );
-};
-
-const createErrorMessage = () => {
-  const errorElement = errorTemplateElement.cloneNode(true);
-  document.body.append(errorElement);
-
-  onErrorButtonClick(errorElement);
-  onPopupEscKeydown(errorElement);
-  onPopupClick(errorElement);
-};
-
-const createSuccessMessage = () => {
-  const successElement = successTemplateElement.cloneNode(true);
-  document.body.append(successElement);
-
-  onPopupEscKeydown(successElement);
-  onPopupClick(successElement);
+    .catch((err) => {
+      onError(err.message);
+    }).finally(unblockSubmitButton);
 };
 
 
-export {getData,sendData,createErrorMessage,createSuccessMessage};
+export {getData,sendData};
