@@ -1,7 +1,7 @@
 import {sendData} from './api.js';
 import {resetMap,createMapAds} from './map.js';
 import {resetFile} from './file.js';
-
+import {createSuccessMessage,createErrorMessage} from './utils.js';
 
 const resetButton = document.querySelector('.ad-form__reset');
 const form = document.querySelector('.ad-form');
@@ -149,7 +149,7 @@ const setAdsFormSubmit = () => {
     const isValid = pristine.validate();
     const formData = new FormData(evt.target);
     if (isValid) {
-      sendData(formData);
+      sendData(createSuccessMessage,createErrorMessage,formData);
       resetForm();
     }
   });

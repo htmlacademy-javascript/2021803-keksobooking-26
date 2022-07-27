@@ -1,4 +1,3 @@
-import {createErrorMessage,createSuccessMessage} from './utils.js';
 import {setActiveMapFilters} from './form-state.js';
 import {blockSubmitButton,unblockSubmitButton} from './form-validate.js';
 
@@ -6,7 +5,7 @@ import {blockSubmitButton,unblockSubmitButton} from './form-validate.js';
 const serverAddressGetData = 'https://26.javascript.pages.academy/keksobooking/data';
 const serverAddressSendData = 'https://26.javascript.pages.academy/keksobooking';
 
-const getData = (onSuccess) => {
+const getData = (onSuccess,onError) => {
   fetch(serverAddressGetData)
     .then((response) => {
       if (!response.ok) {
@@ -19,10 +18,10 @@ const getData = (onSuccess) => {
       onSuccess(advertisements);
     })
     .catch ( (err) =>
-      createErrorMessage(err.message) );
+      onError(err.message));
 };
 
-const sendData = (body) => {
+const sendData = (onSuccess,onError,body) => {
   blockSubmitButton();
   fetch(serverAddressSendData,
     {
@@ -32,13 +31,13 @@ const sendData = (body) => {
   )
     .then((response) => {
       if (response.ok) {
-        createSuccessMessage();
+        onSuccess();
       } else {
-        throw new Error();
+        throw new Error('Не удалось отправить форму. Попробуйте ещё раз');
       }
     })
-    .catch(() => {
-      createErrorMessage('Не удалось отправить форму. Попробуйте ещё раз');
+    .catch((err) => {
+      onError(err.message);
     }).finally(unblockSubmitButton);
 };
 

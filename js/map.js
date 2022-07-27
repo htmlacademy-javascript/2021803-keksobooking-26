@@ -1,7 +1,7 @@
 import {setActiveForm} from './form-state.js';
 import {getRenderingAdvertisement} from './create-advertisements.js';
 import {getData} from './api.js';
-import {getRandomArray,debounce} from './utils.js';
+import {getRandomArray,debounce,createErrorMessage} from './utils.js';
 import {addEventChangeFilter,filterAdvertisements,resetMapFilters} from './filter.js';
 
 const RERENDER_DELAY = 500;
@@ -93,6 +93,6 @@ const createMapAds = () => {
   getData((advertisements) => {
     createMarker(getRandomArray(advertisements));
     addEventChangeFilter (debounce ( () => createMarker(filterAdvertisements(advertisements)),RERENDER_DELAY));
-  });
+  },createErrorMessage);
 };
 export {createMapAds,resetMap};
