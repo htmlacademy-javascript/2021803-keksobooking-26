@@ -110,7 +110,7 @@ const validateForm = () => {
       start: price.value,
     });
   });
-  sliderElement.noUiSlider.on('update', () => {
+  sliderElement.noUiSlider.on('slide', () => {
     pristine.validate(price);
     price.value = sliderElement.noUiSlider.get();
   });
