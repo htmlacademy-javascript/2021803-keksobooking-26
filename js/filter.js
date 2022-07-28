@@ -31,8 +31,7 @@ const checkFeatures = (advertisement
 const filterAdvertisements = (advertisements) => {
   listFeatures = filterFeatures.filter((element) => element.checked);
   const result = [];
-  for (const advertisement
-    of advertisements) {
+  for (const advertisement of advertisements) {
     if (
       checkTypeHouse(advertisement) &&
       checkPriceHouse(advertisement) &&
@@ -40,8 +39,7 @@ const filterAdvertisements = (advertisements) => {
       checkGuestCount(advertisement) &&
       checkFeatures(advertisement)
     ) {
-      result.push(advertisement
-      );
+      result.push(advertisement);
       if (result.length === MAX_ADVERTISEMENTS) {
         return result;
       }
@@ -50,8 +48,10 @@ const filterAdvertisements = (advertisements) => {
   return result;
 };
 
-const addEventChangeFilter = (onUpdate) => filterForm.addEventListener('change', onUpdate);
-
+const addEventChangeFilter = (onUpdate) =>
+{filterForm.addEventListener('change', onUpdate);
+  filterForm.addEventListener('reset', onUpdate);
+};
 const resetMapFilters = () => {
   filterForm.reset();
 };

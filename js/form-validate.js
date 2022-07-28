@@ -1,5 +1,5 @@
 import {sendData} from './api.js';
-import {resetMap,createMapAds} from './map.js';
+import {resetMap} from './map.js';
 import {resetFile} from './file.js';
 import {createSuccessMessage,createErrorMessage} from './utils.js';
 
@@ -72,11 +72,6 @@ const validateForm = () => {
     pristine.validate(capacity);
   });
 
-  typeHouse.addEventListener('change', (evt) => {
-    evt.preventDefault();
-    pristine.validate(price);
-  });
-
   timeIn.addEventListener('change',validateTimeOut);
   timeOut.addEventListener('change',validateTimeIn);
 
@@ -99,21 +94,25 @@ const validateForm = () => {
     },
   });
 
-  sliderElement.noUiSlider.on('update', () => {
-    price.value = sliderElement.noUiSlider.get();
-    pristine.validate(price);
+  price.addEventListener('change', (evt) => {
+    sliderElement.noUiSlider.set(evt.target.value);
   });
+
   typeHouse.addEventListener('change', (evt) => {
     evt.preventDefault();
+    pristine.validate(price);
     price.placeholder = TypeHouseMinPrice[typeHouse.value];
     sliderElement.noUiSlider.updateOptions({
       range: {
-        min: MIN_PRICE,
+        min: TypeHouseMinPrice[typeHouse.value],
         max: MAX_PRICE
       },
       start: price.value,
-      step: 1
     });
+  });
+  sliderElement.noUiSlider.on('update', () => {
+    pristine.validate(price);
+    price.value = sliderElement.noUiSlider.get();
   });
 };
 
@@ -135,7 +134,7 @@ const resetForm = () => {
     start: START_SLIDER,
     padding: MIN_PRICE,
   });
-  createMapAds();
+
 };
 
 resetButton.addEventListener('click', (evt)=>{
@@ -149,10 +148,17 @@ const setAdsFormSubmit = () => {
     const isValid = pristine.validate();
     const formData = new FormData(evt.target);
     if (isValid) {
-      sendData(createSuccessMessage,createErrorMessage,formData);
-      resetForm();
+      sendData(
+        () => {
+          createSuccessMessage();
+          resetForm();
+        },
+        () => {
+          createErrorMessage();
+        },
+        formData);
     }
   });
 };
 
-export {validateForm,setAdsFormSubmit,blockSubmitButton,unblockSubmitButton};
+export {validateForm,setAdsFormSubmit,blockSubmitButton,unblockSubmitButton,resetForm};
