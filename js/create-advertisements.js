@@ -1,4 +1,4 @@
-import {getCorrectGrammar,createPhotos,createFeatures} from './utils.js';
+import {getCorrectGrammar,createPhotos,createFeatures,createDescription} from './utils.js';
 
 const TypesHouse = {
   flat: 'Квартира',
@@ -27,7 +27,7 @@ const getRenderingAdvertisement = (advertisements) => {
       advertisementsElement.querySelector('.popup__text--time').textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
       createFeatures(advertisementsElement,offer);
       createPhotos(advertisementsElement,offer);
-      advertisementsElement.querySelector('.popup__description').textContent = offer.description;
+      createDescription(advertisementsElement,offer);
       advertisementsFragment.append(advertisementsElement);
     });
   return advertisementsFragment;

@@ -55,6 +55,7 @@ const createFeatures = (advertisementsElement,offer) => {
       const isNecessary = offer.features.some ((feature) =>featuresListItem.classList.contains(`popup__feature--${  feature}` ),);
       if (!isNecessary) {
         featuresListItem.remove();
+        featuresContainer.classList.add ('hidden');
       }
     }
   });
@@ -73,6 +74,18 @@ const createPhotos = (advertisementsElement,offer) =>{
         photoElement.alt = 'Фотография жилья';
         photos.appendChild(photoElement);}
     }
+  } else {
+    photos.classList.add ('hidden');
+  }
+};
+
+//Функция отображения описания
+const createDescription = (advertisementsElement,offer) => {
+  const description = advertisementsElement.querySelector('.popup__description');
+  if(offer.description){
+    description.textContent = offer.description;
+  } else {
+    description.classList.add ('hidden');
   }
 };
 
@@ -83,6 +96,7 @@ const debounce = (callback, timeoutDelay) => {
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
 };
+
 //Создание сообщений с обработчиками
 const isEscapeKey = (evt) => evt.key ==='Escape';
 const createMessage = (formContainer) => {
@@ -112,4 +126,4 @@ const createSuccessMessage = () => {
   createMessage(formContainer);
 };
 
-export {getRandomArrayElement, getRandomArray, getAvatarLink,getCorrectGrammar,createPhotos,createFeatures,debounce,createErrorMessage,createSuccessMessage};
+export {getRandomArrayElement, getRandomArray, getAvatarLink,getCorrectGrammar,createPhotos,createFeatures,debounce,createErrorMessage,createSuccessMessage,createDescription};
