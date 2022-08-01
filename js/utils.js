@@ -54,7 +54,7 @@ const createFeatures = (advertisementsElement,offer) => {
     if (offer.features){
       const isNecessary = offer.features.some ((feature) =>featuresListItem.classList.contains(`popup__feature--${  feature}` ),);
       if (!isNecessary) {
-        featuresListItem.remove();
+        featuresContainer.remove();
       }
     }
   });
@@ -73,6 +73,18 @@ const createPhotos = (advertisementsElement,offer) =>{
         photoElement.alt = 'Фотография жилья';
         photos.appendChild(photoElement);}
     }
+  } else {
+    photos.remove();
+  }
+};
+
+//Функция отображения описания
+const createDescription = (advertisementsElement,offer) => {
+  const description = advertisementsElement.querySelector('.popup__description');
+  if(offer.description){
+    description.textContent = offer.description;
+  } else {
+    description.remove();
   }
 };
 
@@ -84,57 +96,33 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-//Создание окна ошибки и успешной загрузки ( с обработчиками)
-const onErrorButtonClick = (formContainer) => {
-  const errorButton = formContainer.querySelector('.error__button');
-  errorButton.addEventListener(
-    'click',
-    () => {
+//Создание сообщений с обработчиками
+const isEscapeKey = (evt) => evt.key ==='Escape';
+const createMessage = (formContainer) => {
+  document.body.append(formContainer);
+
+  const onPopupEscKeydown = (evt) => {
+    if (isEscapeKey) {
+      evt.preventDefault();
       formContainer.remove();
-    },
-    { once: true },
-  );
+      document.removeEventListener('keydown', onPopupEscKeydown);
+    }
+  };
+
+  formContainer.addEventListener('click', () => {
+    formContainer.remove();
+    document.removeEventListener('keydown', onPopupEscKeydown);
+  });
+  document.addEventListener('keydown', onPopupEscKeydown);
 };
 
-const onPopupEscKeydown = (formContainer) => {
-  window.addEventListener(
-    'keydown',
-    (evt) => {
-      const key = evt.key;
-      if (key === 'Escape') {
-        formContainer.remove();
-        window.removeEventListener('keydown', (evt));
-      }
-    },
-  );
+const createErrorMessage = () => {
+  const formContainer = errorTemplateElement.cloneNode(true);
+  createMessage(formContainer);
 };
-
-const onPopupClick = (formContainer) => {
-  document.addEventListener(
-    'click',
-    () => {
-      formContainer.remove();
-    },
-    { once: true },
-  );
-};
-
-const createErrorMessage = (textError) => {
-  const errorElement = errorTemplateElement.cloneNode(true);
-  errorElement.querySelector('.error__message').textContent = textError;
-  document.body.append(errorElement);
-
-  onErrorButtonClick(errorElement);
-  onPopupEscKeydown(errorElement);
-  onPopupClick(errorElement);
-};
-
 const createSuccessMessage = () => {
-  const successElement = successTemplateElement.cloneNode(true);
-  document.body.append(successElement);
-
-  onPopupEscKeydown(successElement);
-  onPopupClick(successElement);
+  const formContainer = successTemplateElement.cloneNode(true);
+  createMessage(formContainer);
 };
 
-export {getRandomArrayElement, getRandomArray, getAvatarLink,getCorrectGrammar,createPhotos,createFeatures,debounce,createErrorMessage,createSuccessMessage};
+export {getRandomArrayElement, getRandomArray, getAvatarLink,getCorrectGrammar,createPhotos,createFeatures,debounce,createErrorMessage,createSuccessMessage,createDescription};

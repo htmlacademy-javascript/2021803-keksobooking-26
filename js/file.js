@@ -1,5 +1,5 @@
 const FILES_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-const BASE_PHOTO = 'img/muffin-grey.svg';
+const BASE_PHOTO = '';
 const BASE_AVATAR = 'img/muffin-grey.svg';
 const fileChooserAvatar = document.querySelector('#avatar');
 const previewAvatar = document.querySelector('#avatar-img');
@@ -37,8 +37,6 @@ const uploadFile = () => {
 };
 const resetFile = () => {
   previewAvatar.src = BASE_AVATAR;
-  if (previewPhoto.querySelector('img')) {
-    previewPhoto.querySelector('img').src = BASE_PHOTO;
-  }
+  previewPhoto.innerHTML = BASE_PHOTO;
 };
 export {uploadFile,resetFile};

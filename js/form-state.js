@@ -2,6 +2,7 @@ const formAdvertisement = document.querySelector('.ad-form');
 const allFieldsetsFormAdvertisement = formAdvertisement.querySelectorAll ('fieldset');
 const formFilterAdvertisement = document.querySelector('.map__filters');
 const allFieldsetsFormFilterAdvertisement = formFilterAdvertisement.querySelectorAll ('fieldset');
+const allSelectFormFilterAdvertisement = formFilterAdvertisement.querySelectorAll ('select');
 const slider = document.querySelector('.ad-form__slider');
 
 //Блокировка формы
@@ -9,6 +10,9 @@ const setInactiveForm = () => {
   formAdvertisement.classList.add('ad-form--disabled');
   allFieldsetsFormAdvertisement.forEach((fieldset) => {
     fieldset.setAttribute('disabled', 'true');
+  });
+  allSelectFormFilterAdvertisement.forEach((select) => {
+    select.setAttribute('disabled', 'true');
   });
   slider.setAttribute('disabled', 'true');
 };
@@ -37,6 +41,9 @@ const setActiveMapFilters =() => {
   formFilterAdvertisement.classList.remove('map__filters--disabled');
   allFieldsetsFormFilterAdvertisement.forEach((fieldset) => {
     fieldset.removeAttribute('disabled', 'true');
+  });
+  allSelectFormFilterAdvertisement.forEach((select) => {
+    select.removeAttribute('disabled', 'true');
   });
 };
 

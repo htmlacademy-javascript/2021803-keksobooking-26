@@ -1,4 +1,4 @@
-import {setActiveForm} from './form-state.js';
+import {setActiveForm,setActiveMapFilters} from './form-state.js';
 import {getRenderingAdvertisement} from './create-advertisements.js';
 import {getData} from './api.js';
 import {getRandomArray,debounce,createErrorMessage} from './utils.js';
@@ -11,23 +11,6 @@ const DefaultAddress ={
   lng: 139.692
 };
 const DEFAULT_ZOOM = '12';
-
-const map = L.map('map-canvas')
-  .on('load', () => {
-    setActiveForm();
-  })
-  .setView({
-    lat: DefaultAddress.lat,
-    lng: DefaultAddress.lng,
-  }, DEFAULT_ZOOM);
-
-address.value = `${DefaultAddress.lat.toFixed(5)},${DefaultAddress.lng.toFixed(5)}`;
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
 
 const mainPinIcon = L.icon({
   iconUrl: './img/main-pin.svg',
@@ -45,16 +28,13 @@ const mainPinMarker = L.marker(
     icon: mainPinIcon,
   },
 );
-mainPinMarker.addTo(map);
-mainPinMarker.on('moveend', (evt) => {
-  const coordinates = evt.target.getLatLng();
-  address.value = `${coordinates.lat.toFixed(5)},${coordinates.lng.toFixed(5)}`;
-});
+
 const icon = L.icon({
   iconUrl: './img/pin.svg',
   iconSize: [40, 40],
   iconAnchor: [20, 40],
 });
+const map = L.map('map-canvas');
 
 const markerGroup = L.layerGroup().addTo(map);
 const createMarker = (advertisements) => {
@@ -75,6 +55,34 @@ const createMarker = (advertisements) => {
       .bindPopup(advertisementsFragment.children[i]);
   }
 };
+
+map.on('load', () => {
+  setActiveForm();
+  getData((advertisements) => {
+    createMarker(getRandomArray(advertisements));
+    addEventChangeFilter (debounce ( () => createMarker(filterAdvertisements(advertisements)),RERENDER_DELAY),
+      setActiveMapFilters());
+  },createErrorMessage);
+})
+  .setView({
+    lat: DefaultAddress.lat,
+    lng: DefaultAddress.lng,
+  }, DEFAULT_ZOOM);
+
+address.value = `${DefaultAddress.lat.toFixed(5)},${DefaultAddress.lng.toFixed(5)}`;
+L.tileLayer(
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  },
+).addTo(map);
+
+mainPinMarker.addTo(map);
+mainPinMarker.on('moveend', (evt) => {
+  const coordinates = evt.target.getLatLng();
+  address.value = `${coordinates.lat.toFixed(5)},${coordinates.lng.toFixed(5)}`;
+});
+
 const resetMap = () => {
   mainPinMarker.setLatLng({
     lat: DefaultAddress.lat,
@@ -88,11 +96,4 @@ const resetMap = () => {
   resetMapFilters();
 };
 
-//Отрисовка готовой карты с объявлениями
-const createMapAds = () => {
-  getData((advertisements) => {
-    createMarker(getRandomArray(advertisements));
-    addEventChangeFilter (debounce ( () => createMarker(filterAdvertisements(advertisements)),RERENDER_DELAY));
-  },createErrorMessage);
-};
-export {createMapAds,resetMap};
+export {resetMap,createMarker};
