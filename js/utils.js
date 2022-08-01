@@ -54,8 +54,7 @@ const createFeatures = (advertisementsElement,offer) => {
     if (offer.features){
       const isNecessary = offer.features.some ((feature) =>featuresListItem.classList.contains(`popup__feature--${  feature}` ),);
       if (!isNecessary) {
-        featuresListItem.remove();
-        featuresContainer.classList.add ('hidden');
+        featuresContainer.remove();
       }
     }
   });
@@ -75,7 +74,7 @@ const createPhotos = (advertisementsElement,offer) =>{
         photos.appendChild(photoElement);}
     }
   } else {
-    photos.classList.add ('hidden');
+    photos.remove();
   }
 };
 
@@ -85,7 +84,7 @@ const createDescription = (advertisementsElement,offer) => {
   if(offer.description){
     description.textContent = offer.description;
   } else {
-    description.classList.add ('hidden');
+    description.remove();
   }
 };
 
